@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import useInitialiseTournament from "../helpers/tournament-initialiser.js";
 import "../index.css";
+import Round from "./round.js";
 
 const Game = () => {
   const { players, setPlayers } = useInitialiseTournament();
@@ -42,7 +44,7 @@ const Game = () => {
         matches: winnerss,
       };
 
-      let ter = (players.length <= 32 ? 15 : 2) * 1000;
+      let ter = (players.length <= 32 ? 2 : 2) * 1000;
 
       setTimer(ter);
 
@@ -81,7 +83,7 @@ const Game = () => {
     timer / 1000 < 60
       ? timer / 1000 + " Seconds"
       : timer / 1000 / 60 + " Minutes";
-
+  console.log(winners, 'my winners')
   return (
     <div>
       <div className="game">
@@ -93,20 +95,35 @@ const Game = () => {
               return (
                 <>
                   <h1 style={{ padding: "0px 10px" }}>{entry.name}</h1>
-                  {entry.matches.map((match, ind) => {
-                    return (
-                      <tr key={ind}>
-                        <td>Fighter #{match?.player1?.id}</td>
-                        <td className="weigh">| {match?.player1?.weighting}</td>
-                        <td>vs</td>
-                        <td>Fighter #{match?.player2?.id}</td>
-                        <td className="weigh">| {match?.player2?.weighting}</td>
-                        <td>Winner: </td>
-                        <td>Fighter #{match?.result?.id}</td>
-                        <td className="weigh">| {match?.result?.weighting}</td>
-                      </tr>
-                    );
-                  })}
+                  {
+                    entry.matches.length <= 16 ? 
+                    <section id="bracket">
+                    <div className="container">
+                    {
+                    entry.matches.map(({player1,player2,result}, ind) => {
+                      <Round />
+                    })  
+                    }   
+                    </div>
+                  </section> 
+                  
+                    :
+                      entry.matches.map((match, ind) => {
+                        return (
+                          <tr key={ind}>
+                            <td>Fighter #{match?.player1?.id}</td>
+                            <td className="weigh">| {match?.player1?.weighting}</td>
+                            <td>vs</td>
+                            <td>Fighter #{match?.player2?.id}</td>
+                            <td className="weigh">| {match?.player2?.weighting}</td>
+                            <td>Winner: </td>
+                            <td>Fighter #{match?.result?.id}</td>
+                            <td className="weigh">| {match?.result?.weighting}</td>
+                          </tr>
+                        );
+                      })
+
+                  }
                 </>
               );
             })}
@@ -116,5 +133,16 @@ const Game = () => {
     </div>
   );
 };
+
+export const Config = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Game />} />
+        <Route path="/round" element={<Round />} />
+      </Routes>
+    </Router>
+  )
+}
 
 export default Game;
