@@ -5,6 +5,7 @@ import Layout from './Layout';
 import Game from '../components/game'
 import Home from './Home';
 import History from './History';
+import { Round2, Round3 } from '../components/round';
 
 const index = () => {
     return (
@@ -12,6 +13,7 @@ const index = () => {
             <Router>
                 <Routes>
                     <Route path="/" element={<Game />} />
+                    <Route path="/round" element={<Round3 />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/history" element={<History />} />
                 </Routes>

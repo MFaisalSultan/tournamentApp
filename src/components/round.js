@@ -227,22 +227,19 @@ const round = ({ rounds }) => {
 export const Round2 = ({ rounds: prevRounds }) => {
   const rounds = Array.from(new Array(6));
   const lastIndex = rounds.length - 1;
-  console.log(prevRounds,'perv rounds')
+  console.log(prevRounds, 'perv rounds')
   // let spliTwoArr = [];
   return (
-    <section id="bracket" style={{marginTop:'2rem'}}>
+    <section id="bracket" style={{ marginTop: '2rem' }}>
       <div className="container">
         <div className="split split-one">
           {rounds.slice(0, 5).map((_, ind, { length: parentLength }) => {
             let noItems = ind === 4 ? 1 : Math.pow(2, 3 - ind);
             let item = prevRounds[ind] ?? { name: "null ", matches: [] };
-            // console.log(noItems);
-            // item.matches = item.matches.sort((a,b)=> a.player1.id !== b.player1.id ? a.player1.id - b.player1.id : a.player2.id - b.player2.id)
             return (
               <div
-                className={`round round-${ind + 1}  ${
-                  !!prevRounds[ind] && "current"
-                }`}
+                className={`round round-${ind + 1}  ${!!prevRounds[ind] && "current"
+                  }`}
               >
                 {Array.from(new Array(noItems)).map(
                   (v, childInd, { length: childLength }) => {
@@ -269,20 +266,20 @@ export const Round2 = ({ rounds: prevRounds }) => {
                           parentLength - 1 === ind &&
                           childLength - 1 === childInd
                         ) && (
-                          <li
-                            className="team team-bottom"
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            {childItem.player2?.name}&nbsp;
-                            <span className="score">
-                              {" "}
-                              &nbsp; {childItem.player2?.id}
-                            </span>
-                          </li>
-                        )}
+                            <li
+                              className="team team-bottom"
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              {childItem.player2?.name}&nbsp;
+                              <span className="score">
+                                {" "}
+                                &nbsp; {childItem.player2?.id}
+                              </span>
+                            </li>
+                          )}
                       </ul>
                     );
                   }
@@ -316,7 +313,8 @@ export const Round2 = ({ rounds: prevRounds }) => {
             // item.matches = item.matches.sort((a,b)=> a.player1.id -b.player1.id )
 
             return (
-              <div className={`round round-${5 - ind}  current`}>
+              <div className={`round round-${5 - ind} ${!!prevRounds[ind] && "current"
+                }`}>
                 {Array.from(new Array(noItems)).map(
                   (v, childInd, { length: childLength }) => {
                     let itemInd = item.matches.length - 1 - childInd;
