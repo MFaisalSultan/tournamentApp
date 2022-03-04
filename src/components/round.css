@@ -84,7 +84,7 @@
   flex-direction: row;
   -webkit-align-self: center;
   align-self: center;
-  margin-top: 10px;
+  margin-top: 40px;
   text-align: center;
   /* padding: 230px 0\9; */
 }
@@ -129,8 +129,8 @@
   color: #2c7399;
   font-weight: bold;
   font-family: "Roboto Condensed", sans-serif;
-  position: absolute;
-  right: 5px;
+  /* position: absolute;
+  right: 5px; */
 }
 .team {
   padding: 0 5px;
@@ -141,30 +141,30 @@
   overflow: hidden;
   position: relative;
 }
-.round-two .matchup {
+.round-2 .matchup {
   margin: 0;
   height: 60px;
   padding: 50px 0;
 }
-.round-three .matchup {
+.round-3 .matchup {
   margin: 0;
   height: 60px;
   padding: 130px 0;
 }
-.round-four .matchup {
+.round-4 .matchup {
   margin: 0;
   height: 60px;
   padding: 280px 0;
 }
-.round-five .matchup {
+.round-5 .matchup {
   margin: 0;
   height: 60px;
   padding: 295px 0;
 }
-.round-six {
+.round-6 {
   width: 100%;
 }
-.round-six .matchup {
+.round-6 .matchup {
   height: 100%;
 }
 .round-details {
