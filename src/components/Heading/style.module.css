@@ -1,0 +1,24 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  position: relative;
+}
+.headingParent{
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+.headingParent img{
+    padding-left: 15px;
+    padding-top: 10px;
+    cursor: pointer;
+}
+.bar {
+  background-color: #b91414;
+  width: 58%;
+  margin-left: -38px;
+  height: 0.5vh;
+}
+

@@ -1,0 +1,13 @@
+.modalBody p {
+  font-size: 14px;
+}
+.secondPara {
+  margin-top: 2rem !important;
+  margin-bottom: 2rem !important;
+}
+.btn {
+  background: linear-gradient(180deg, #fdca00 0%, #fe0000 100%);
+  box-shadow: none !important;
+  border: none !important;
+  outline:  none !important;
+}

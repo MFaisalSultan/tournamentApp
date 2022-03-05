@@ -1,0 +1,32 @@
+.main{
+ display: flex;   
+ border-bottom: 5px solid #B91414;;
+}
+.icon1{
+    width: 16px;
+}
+.icon2{
+    width: 11px;
+    cursor: pointer;
+}
+.search{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-radius: 0;
+    width: 100%;
+    color: white !important;
+}
+.search::placeholder{
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+}
+input:focus{
+    background: transparent;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+}

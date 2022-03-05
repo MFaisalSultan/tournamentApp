@@ -1,0 +1,63 @@
+.row {
+  width: 100%;
+  align-items: flex-start;
+}
+tr,
+td {
+  border: none !important;
+  outline: none !important;
+}
+.tableRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.tableRow td{
+    font-size: 20px;
+}
+.firstCol {
+  background: #c8252a;
+  color: white;
+  font-style: italic;
+  clip-path: polygon(4% 0%, 100% 0%, 95% 100%, 0% 100%);
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 2rem;
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.firstCol img {
+  width: 32px;
+  height: 32px;
+}
+.secondCol {
+  align-self: flex-start;
+  text-align: center;
+  width: 20%;
+}
+.secondCol img {
+  width: 65%;
+  height: 100%;
+}
+.thirdCol {
+  background: #4ec9ff;
+  color: white;
+  font-style: italic;
+  clip-path: polygon(4% 0%, 100% 0%, 95% 100%, 0% 100%);
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 2rem;
+  display: flex;
+  width: 40%;
+  align-items: center;
+  justify-content: space-between;
+}
+.thirdCol img {
+  width: 32px;
+  height: 32px;
+}
+.colDark{
+    background: #000 !important;
+}

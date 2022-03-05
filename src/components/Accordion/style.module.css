@@ -1,0 +1,73 @@
+.myaccordion {
+  margin-top: 4rem;
+}
+.card {
+  background-color: #151515;
+  border: 3px solid #ffffff;
+  padding: 10px 0;
+}
+.cardHeader{
+  border: none !important;
+  background-color: #151515 !important;
+  background: #151515;
+}
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+}
+.cardBody h3 {
+  font-size: 26px;
+  color: white;
+}
+.cardBody p {
+  font-size: 14px;
+  text-align: center;
+}
+.icon {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+.timer {
+  font-size: 26px;
+  text-align: right;
+  margin-bottom: 10px !important;
+}
+.row {
+  align-items: flex-start;
+}
+.firstCol {
+  display: flex;
+  justify-content: flex-start;
+}
+.secondCol {
+  display: flex;
+  justify-content: center;
+}
+.thirdCol {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tableRow {
+  width: 100%;
+  align-items: flex-start;
+}
+table {
+  border: none !important;
+  outline: none !important;
+  overflow-y: scroll;
+  display: block;
+  height: 60vh !important;
+}
+table::-webkit-scrollbar {
+  width: 0;
+}
+
+table::-webkit-scrollbar-thumb {
+  background-color: white;
+  border: none;
+}

@@ -2,7 +2,7 @@ import React from "react";
 import "./round.css";
 
 const round = ({ rounds }) => {
-  console.log(rounds, "my winners");
+  // console.log(rounds, "my winners");
   let lastIndex = round.length - 1;
   return (
     <div className="container">
@@ -10,7 +10,7 @@ const round = ({ rounds }) => {
         {rounds.slice(0, 5).map((v, i) => {
           let getTotalValue = v.matches.length / 2 + 1;
           let matches = v.matches.slice(0, getTotalValue);
-          console.log(i, getTotalValue, "parent index");
+          // console.log(i, getTotalValue, "parent index");
           return (
             <div className={`round round-${i + 1} current`}>
               {matches.map((value, ind) => {
@@ -227,7 +227,7 @@ const round = ({ rounds }) => {
 export const Round2 = ({ rounds: prevRounds }) => {
   const rounds = Array.from(new Array(6));
   const lastIndex = rounds.length - 1;
-  console.log(prevRounds, 'perv rounds')
+  // console.log(prevRounds, 'perv rounds')
   // let spliTwoArr = [];
   return (
     <section id="bracket" style={{ marginTop: '2rem' }}>
@@ -251,13 +251,14 @@ export const Round2 = ({ rounds: prevRounds }) => {
                     return (
                       <ul className="matchup">
                         <li
-                          className="team team-top"
+                          className="team team-top first-team"
                           style={{
                             display: "flex",
                             justifyContent: "space-between",
+                            backgroundColor:childItem.player1?.id === childItem.result?.id ?'#c8252a':'#000'
                           }}
                         >
-                          {childItem.player1?.name}
+                          Fighter #
                           <span className="score">
                             {childItem.player1?.id}{" "}
                           </span>
@@ -267,16 +268,17 @@ export const Round2 = ({ rounds: prevRounds }) => {
                           childLength - 1 === childInd
                         ) && (
                             <li
-                              className="team team-bottom"
+                              className="team team-bottom first-team"
                               style={{
                                 display: "flex",
                                 justifyContent: "space-between",
+                                backgroundColor:childItem.player2?.id === childItem.result?.id ?'#c8252a':'#000'
                               }}
                             >
-                              {childItem.player2?.name}&nbsp;
+                              Fighter #
                               <span className="score">
                                 {" "}
-                                &nbsp; {childItem.player2?.id}
+                                {childItem.player2?.id}
                               </span>
                             </li>
                           )}
@@ -292,10 +294,11 @@ export const Round2 = ({ rounds: prevRounds }) => {
         {prevRounds.slice(lastIndex).map((v, i) => {
           return (
             <div className="champion">
+                <p>WINNER</p>
               <div className="round round-six">
                 <ul className="matchup">
-                  <li className="team team-bottom">
-                    {v.matches[0].result?.name}
+                  <li className="team team-bottom win-team">
+                  Fighter #
                     <span className="score">{v.matches[0].result?.id}</span>
                   </li>
                 </ul>
@@ -323,28 +326,29 @@ export const Round2 = ({ rounds: prevRounds }) => {
                       player2: null,
                       result: null,
                     };
-                    // console.log(childInd, item.matches.length, "childitem");
                     return (
                       <ul className="matchup">
                         <li
-                          className="team team-top"
+                          className="team team-top second-team"
                           style={{
                             display: "flex",
                             justifyContent: "space-between",
+                            backgroundColor:childItem.player1?.id === childItem.result?.id ?'#4ec9ff':'#000'
                           }}
                         >
-                          {childItem.player1?.name}
+                          Fighter #
                           <span className="score">{childItem.player1?.id}</span>
                         </li>
                         {!(0 === ind && 0 === childInd) && (
                           <li
-                            className="team team-bottom"
+                            className="team team-bottom second-team"
                             style={{
                               display: "flex",
                               justifyContent: "space-between",
+                              backgroundColor:childItem.player2?.id === childItem.result?.id ?'#4ec9ff':'#000'
                             }}
                           >
-                            {childItem.player2?.name}
+                            Fighter #
                             <span className="score">
                               {childItem.player2?.id}
                             </span>

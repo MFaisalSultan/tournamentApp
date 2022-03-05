@@ -5,9 +5,9 @@
 }
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
-  background-color: #ececea;
-  /* background-color: #000; */
+  /* margin: 20px; */
+  /* background-color: #ececea; */
+  background-color: #151515;
 }
 
 ol,
@@ -119,9 +119,14 @@ h1,p{
  h1{
    font-size: 50px;
    font-style: italic;
-   /* color: white; */
+   color: white;
  }
  p{
    font-size: 22px;
-   /* color: white; */
+   color: white;
  }
+/* Comman Modal */
+.modal-content{
+  background-color: #151515;
+  color: white;
+}

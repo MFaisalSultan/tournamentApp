@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import useInitialiseTournament from "../helpers/tournament-initialiser.js";
 import "../index.css";
-import Round, { Round2 } from "./round.js";
+import CommonAccordion from "./Accordion/index.js";
+import { Round2 } from "./round.js";
+import CommonTable from "./Table/index.js";
 
 const Game = () => {
   const { players, setPlayers, noOfRounds } = useInitialiseTournament();
@@ -10,7 +11,7 @@ const Game = () => {
   const [timer, setTimer] = useState(0);
 
   const randPlayer = () => {
-    let index = players.length > 32? Math.floor(Math.random() * players.length):0
+    let index = players.length > 32 ? Math.floor(Math.random() * players.length) : 0
 
     let player = players[index];
     players.splice(index, 1);
@@ -51,7 +52,7 @@ const Game = () => {
       let interval = setInterval(() => {
         setWinners([...winners, newStructure]);
         if (dataToReAssign.length > 0) {
-          if(players.length === 32) setPlayers(dataToReAssign.sort((a,b)=>a.id-b.id));
+          if (players.length === 32) setPlayers(dataToReAssign.sort((a, b) => a.id - b.id));
           else setPlayers(dataToReAssign)
         } else {
           dataToReAssign = [];
@@ -70,7 +71,8 @@ const Game = () => {
     let letSecondsInterval = setInterval(() => {
       if (timer > 0) {
         setTimer(timer - 1000);
-      } else {
+      }
+      else {
         startGame();
       }
     }, 1000);
@@ -96,8 +98,15 @@ const Game = () => {
       <div className="game">
         <div className="game-board"></div>
         <h1>Winners Will Display After {counter}</h1>
-        <div className="game-info" style={{width:'90%'}}>
-          <table>
+        <div className="game-info" style={{ width: '90%' }}>
+          {
+            restOfAllWinners.map((entry, index) => {
+              return (
+                <CommonAccordion counter={counter} data={entry} />
+              )
+            })
+          }
+          {/* <table>
             {restOfAllWinners.map((entry, index) => {
               return (
                 <>
@@ -119,11 +128,9 @@ const Game = () => {
                 </>
               );
             })}
-          </table>
+          </table> */}
           {TTWinners.length > 0 && (
-            // <section id="bracket">
-              <Round2 rounds={TTWinners} />
-            // </section>
+            <CommonAccordion TTWinners={TTWinners.length ? TTWinners : false} counter={counter} />
           )}
         </div>
       </div>
@@ -131,16 +138,5 @@ const Game = () => {
   );
 };
 
-export const Config = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Game />} />
-        <Route path="/round" element={<Round />} />
-        <Route path="/round2" element={<Round2 />} />
-      </Routes>
-    </Router>
-  );
-};
 
 export default Game;

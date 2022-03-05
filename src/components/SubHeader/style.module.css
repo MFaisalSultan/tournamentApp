@@ -1,23 +1,12 @@
 .row {
   align-items: flex-end;
 }
-.heading {
-  position: relative;
-}
-.heading span {
-  position: absolute;
-  bottom: -13px;
-  left: 1rem;
-  background-color: #b91414;
-  width: 25vw;
-  height: 0.5vh;
-}
-.heading img {
-  position: absolute;
-  top: 12px;
-  right: 10px;
-}
 .button {
   border-radius: 7px;
   padding: 5px 15px;
+  background: linear-gradient(180deg,#fdca00 0%,#fe0000 100%);
+  border: none;
+}
+.date{
+  font-size: 16px;
 }
