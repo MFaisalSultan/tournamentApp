@@ -230,7 +230,7 @@ export const Round2 = ({ rounds: prevRounds }) => {
   // console.log(prevRounds, 'perv rounds')
   // let spliTwoArr = [];
   return (
-    <section id="bracket" style={{ marginTop: '2rem' }}>
+    <section id="bracket">
       <div className="container">
         <div className="split split-one">
           {rounds.slice(0, 5).map((_, ind, { length: parentLength }) => {

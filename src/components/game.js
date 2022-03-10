@@ -46,7 +46,7 @@ const Game = () => {
         matches: winnerss,
       };
 
-      let ter = (players.length <= 32 ? 2 : 2) * 1000;
+      let ter = (players.length <= 32 ? 2 : 2) * 1000 * 15;
 
       setTimer(ter);
       let interval = setInterval(() => {
@@ -99,39 +99,22 @@ const Game = () => {
         <div className="game-board"></div>
         <h1>Winners Will Display After {counter}</h1>
         <div className="game-info" style={{ width: '90%' }}>
-          {
+          {restOfAllWinners.length > 0 ?
             restOfAllWinners.map((entry, index) => {
               return (
                 <CommonAccordion counter={counter} data={entry} />
               )
             })
+            :
+            <CommonAccordion counter={counter} showData={true} />
           }
-          {/* <table>
-            {restOfAllWinners.map((entry, index) => {
-              return (
-                <>
-                  <h1 style={{ padding: "0px 10px" }}>{entry.name}</h1>
-                  {entry.matches.map((match, ind) => {
-                    return (
-                      <tr key={ind}>
-                        <td>Fighter #{match?.player1?.id}</td>
-                        <td className="weigh">| {match?.player1?.weighting}</td>
-                        <td>vs</td>
-                        <td>Fighter #{match?.player2?.id}</td>
-                        <td className="weigh">| {match?.player2?.weighting}</td>
-                        <td>Winner: </td>
-                        <td>Fighter #{match?.result?.id}</td>
-                        <td className="weigh">| {match?.result?.weighting}</td>
-                      </tr>
-                    );
-                  })}
-                </>
-              );
-            })}
-          </table> */}
-          {TTWinners.length > 0 && (
-            <CommonAccordion TTWinners={TTWinners.length ? TTWinners : false} counter={counter} />
-          )}
+          {
+            TTWinners.length > 0 ?
+              <CommonAccordion TTWinners={TTWinners.length ? TTWinners : false} counter={counter} />
+              :
+              <CommonAccordion counter={counter} showData={true} />
+
+          }
         </div>
       </div>
     </div>

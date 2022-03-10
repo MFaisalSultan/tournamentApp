@@ -8,7 +8,7 @@ import CommonInput from "../Input";
 import CommonTable from "../Table";
 import { Round2 } from "../round";
 
-const CommonAccordion = ({ data, counter, TTWinners }) => {
+const CommonAccordion = ({ data, counter, TTWinners,showData }) => {
   const [searchValue, setSearchValue] = useState('')
   let saveData = data?.matches ?? []
   if (!!searchValue) {
@@ -36,7 +36,7 @@ const CommonAccordion = ({ data, counter, TTWinners }) => {
             </Row>
           </Card.Header>
           <Accordion.Collapse eventKey="0">
-            <Card.Body className={styles.cardBody}>
+            <Card.Body className={styles.cardBody} >
               {TTWinners && <Round2 rounds={TTWinners} />}
               {saveData.length > 0 && <Row className={styles.tableRow}>
                 <Col md={3}></Col>
@@ -48,9 +48,12 @@ const CommonAccordion = ({ data, counter, TTWinners }) => {
                 <Col md={3}></Col>
               </Row>}
 
-              {/* <h3>Result will display soon...</h3>
-            <p>Lorem Ipsum is simply dummy text of the printing <br /> and typesetting industry.</p> */}
-            </Card.Body>
+              {showData && 
+              <>
+                <h3>Result will display soon...</h3>
+                <p>Lorem Ipsum is simply dummy text of the printing <br /> and typesetting industry.</p>
+              </>
+              }            </Card.Body>
           </Accordion.Collapse>
         </Card>
       </Accordion>
