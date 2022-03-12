@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useInitialiseTournament from "../helpers/tournament-initialiser.js";
 import "../index.css";
+import { DataContext } from "../services/dataContext.js";
 import CommonAccordion from "./Accordion/index.js";
 import { Round2 } from "./round.js";
 import CommonTable from "./Table/index.js";
@@ -9,9 +10,11 @@ const Game = () => {
   const { players, setPlayers, noOfRounds } = useInitialiseTournament();
   const [winners, setWinners] = useState([]);
   const [timer, setTimer] = useState(0);
-
+  // const { users } = useContext(DataContext);
+  console.log("rendering game");
   const randPlayer = () => {
-    let index = players.length > 32 ? Math.floor(Math.random() * players.length) : 0
+    let index =
+      players.length > 32 ? Math.floor(Math.random() * players.length) : 0;
 
     let player = players[index];
     players.splice(index, 1);
@@ -52,8 +55,9 @@ const Game = () => {
       let interval = setInterval(() => {
         setWinners([...winners, newStructure]);
         if (dataToReAssign.length > 0) {
-          if (players.length === 32) setPlayers(dataToReAssign.sort((a, b) => a.id - b.id));
-          else setPlayers(dataToReAssign)
+          if (players.length === 32)
+            setPlayers(dataToReAssign.sort((a, b) => a.id - b.id));
+          else setPlayers(dataToReAssign);
         } else {
           dataToReAssign = [];
           setPlayers(dataToReAssign);
@@ -71,8 +75,7 @@ const Game = () => {
     let letSecondsInterval = setInterval(() => {
       if (timer > 0) {
         setTimer(timer - 1000);
-      }
-      else {
+      } else {
         startGame();
       }
     }, 1000);
@@ -94,32 +97,28 @@ const Game = () => {
     TTWinners = winners.slice(restIndex);
   }
   return (
-    <div>
-      <div className="game">
-        <div className="game-board"></div>
-        <h1>Winners Will Display After {counter}</h1>
-        <div className="game-info" style={{ width: '90%' }}>
-          {restOfAllWinners.length > 0 ?
-            restOfAllWinners.map((entry, index) => {
-              return (
-                <CommonAccordion counter={counter} data={entry} />
-              )
-            })
-            :
+    <div className="game">
+      <div className="game-board"></div>
+      <h1>Winners Will Display After {counter}</h1>
+      <div className="game-info" style={{ width: "90%" }}>
+        {restOfAllWinners.length > 0 ? (
+          restOfAllWinners.map((entry, index) => {
+            return <CommonAccordion counter={counter} data={entry} />;
+          })
+        ) : (
+          <CommonAccordion counter={counter} showData={true} />
+        )}
+        {/* {TTWinners.length > 0 ? (
+            <CommonAccordion
+              TTWinners={TTWinners.length ? TTWinners : false}
+              counter={counter}
+            />
+          ) : (
             <CommonAccordion counter={counter} showData={true} />
-          }
-          {
-            TTWinners.length > 0 ?
-              <CommonAccordion TTWinners={TTWinners.length ? TTWinners : false} counter={counter} />
-              :
-              <CommonAccordion counter={counter} showData={true} />
-
-          }
-        </div>
+          )} */}
       </div>
     </div>
   );
 };
-
 
 export default Game;
