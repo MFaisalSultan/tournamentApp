@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Accordion, Card, Col, Row, Table, useAccordionButton } from "react-bootstrap";
+import {
+  Accordion,
+  Card,
+  Col,
+  Row,
+  Table,
+  useAccordionButton,
+} from "react-bootstrap";
 import styles from "./style.module.css";
 import expand from "../../assets/icons/expand.svg";
 import close from "../../assets/icons/close.svg";
@@ -7,53 +14,86 @@ import CommonHeading from "../Heading";
 import CommonInput from "../Input";
 import CommonTable from "../Table";
 import { Round2 } from "../round";
+import Counter from "../Counter";
 
-const CommonAccordion = ({ data, counter, TTWinners,showData }) => {
-  const [searchValue, setSearchValue] = useState('')
-  let saveData = data?.matches ?? []
+const CommonAccordion = ({ data, counter, TTWinners = [], round }) => {
+  const [searchValue, setSearchValue] = useState("");
+  let saveData = data?.matches ?? [];
+
   if (!!searchValue) {
-    saveData = data.matches?.filter((v) => {
-      return v.player1?.id == searchValue || v.player2?.id == searchValue
-    })
+    saveData = data?.matches?.filter((v) => {
+      return v.player1?.id == searchValue || v.player2?.id == searchValue;
+    });
   }
+  let showData =
+    TTWinners.length > 0
+      ? TTWinners[0]?.matches?.length === 0
+      : data?.matches?.length === 0;
+  let roundInfo = data ? data : TTWinners[TTWinners.length - 1];
+  // console.log(round, "round");
+  // const [done, setDone] = useState();
   return (
     <>
       <Accordion className={styles.myaccordion}>
-        <h1 className={styles.timer}>25 : 20</h1>
+        <h1 className={styles.timer}>
+          <Counter {...roundInfo} current={round} />
+        </h1>
         <Card className={styles.card}>
           <Card.Header className={styles.cardHeader}>
             <Row className={styles.row}>
               <Col md={3} className={styles.firstCol}>
                 <CommonHeading
-                  title={saveData?.name ?? 'FinalRound'}
+                  title={
+                    TTWinners.length > 0
+                      ? "Final Round"
+                      : "Round " + roundInfo.round
+                  }
                   size="30px"
                   barWidth="80%"
                   barMargin="-23px"
                 />
               </Col>
-              <Col md={6} className={styles.secondCol} > {!TTWinners && <CommonInput searchValue={searchValue} setSearchValue={setSearchValue} />} </Col>
-              <Col md={3} className={styles.thirdCol} > <CustomToggle eventKey="0" /></Col>
+              <Col md={6} className={styles.secondCol}>
+                {" "}
+                {TTWinners.length === 0 && data && (
+                  <CommonInput
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                  />
+                )}{" "}
+              </Col>
+              <Col md={3} className={styles.thirdCol}>
+                {" "}
+                <CustomToggle eventKey="0" />
+              </Col>
             </Row>
           </Card.Header>
           <Accordion.Collapse eventKey="0">
-            <Card.Body className={styles.cardBody} >
-              {TTWinners && <Round2 rounds={TTWinners} />}
-              {saveData.length > 0 && <Row className={styles.tableRow}>
-                <Col md={3}></Col>
-                <Col md={6}>
-                  <Table className={styles.table} striped bordered hover>
-                    <CommonTable data={saveData} />
-                  </Table>
-                </Col>
-                <Col md={3}></Col>
-              </Row>}
-
-              {showData && 
-              <>
-                <h3>Result will display soon...</h3>
-                <p>Lorem Ipsum is simply dummy text of the printing <br /> and typesetting industry.</p>
-              </>
-              }            </Card.Body>
+            <Card.Body className={styles.cardBody}>
+              {TTWinners.length > 0 && TTWinners[0].matches.length > 0 && (
+                <Round2 rounds={TTWinners} />
+              )}
+              {saveData.length > 0 && (
+                <Row className={styles.tableRow}>
+                  <Col md={3}></Col>
+                  <Col md={6}>
+                    <Table className={styles.table} striped bordered hover>
+                      <CommonTable data={saveData} />
+                    </Table>
+                  </Col>
+                  <Col md={3}></Col>
+                </Row>
+              )}
+              {showData && (
+                <>
+                  <h3>Result will display soon...</h3>
+                  <p>
+                    Lorem Ipsum is simply dummy text of the printing <br /> and
+                    typesetting industry.
+                  </p>
+                </>
+              )}{" "}
+            </Card.Body>
           </Accordion.Collapse>
         </Card>
       </Accordion>

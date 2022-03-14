@@ -1,9 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { initialData } from "../../helpers/tournament-initialiser";
-import { setLoading } from "./userSlice";
+import { setLoading, setError } from "./userSlice";
 
 import { app, creatingTournament } from "../../services/firebase";
-let counter = 0;
 export const createTournaments = createAsyncThunk(
   "create/tournaments",
   async (_, { dispatch, getState }) => {
@@ -14,6 +13,12 @@ export const createTournaments = createAsyncThunk(
       // const tournamentName = "Tournament " + (tournaments.length + 1);
       const tournament = await creatingTournament();
 
+      if (!tournament.data.success) {
+        dispatch(setError(tournament.data.message));
+      }
+      setTimeout(() => {
+        dispatch(setError(null));
+      }, 3000);
       console.log("tournament", tournament);
       // const { players, playersCount, rounds } = initialData(users);
       dispatch(setLoading(false));

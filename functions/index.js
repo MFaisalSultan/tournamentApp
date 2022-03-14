@@ -26,26 +26,27 @@ exports.createTournaments = functions.https.onCall(async (_, context) => {
         };
       else {
         no = lastTournament.no + 1;
-        tournamentName = "Tournament " + no;
       }
     } else {
       no = 1;
     }
+    tournamentName = "Tournament " + no;
 
     const users = (await userRef.once("value")).val();
     const { rounds, players, playersCount } = initialData(Object.values(users));
     const tournament = tournamentRef.doc();
+    const created = new Date();
     let data = await tournament.set({
       id: tournament.id,
       rounds,
       no,
       players,
       playersCount,
-      tournamentName,
+      name: tournamentName,
       currentRound: 1,
       status: "active",
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      createdAt: created.getTime(),
+      updatedAt: created.getTime(),
     });
 
     const roundsRef = tournament.collection("rounds");
@@ -71,7 +72,7 @@ exports.createTournaments = functions.https.onCall(async (_, context) => {
 const checkRound = async (roundsRef, totalRounds, players = {}) => {
   const rounds = await roundsRef.get();
   const completeRounds = rounds.docs.length ?? 0;
-  let addTime = 2;
+  let addTime = 30;
   const currentRound = completeRounds + 1;
 
   const roundRef = roundsRef.doc(`${currentRound}`);
@@ -100,7 +101,7 @@ const checkRound = async (roundsRef, totalRounds, players = {}) => {
         {
           status: "finished",
           winner: matches[0].result,
-          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: Date.now(),
         },
         {
           merge: true,
@@ -114,14 +115,14 @@ const checkRound = async (roundsRef, totalRounds, players = {}) => {
   roundsRef.parent.update(
     {
       currentRound,
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: Date.now(),
     },
     {
       merge: true,
     }
   );
   if (totalRounds - completeRounds <= 5) {
-    addTime = 1;
+    addTime = 10;
   }
   const created = new Date();
   await roundRef.set({
@@ -137,12 +138,12 @@ const checkRound = async (roundsRef, totalRounds, players = {}) => {
   if (currentRound <= totalRounds)
     setTimeout(async () => {
       checkRound(roundsRef, totalRounds, players);
-    }, addTime * 1000);
+    }, (currentRound === 1 ? addTime - 3 : addTime) * 1000);
   else {
     roundsRef.parent.update(
       {
         status: "finished",
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: Date.now(),
       },
       {
         merge: true,

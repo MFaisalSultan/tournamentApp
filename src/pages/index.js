@@ -1,61 +1,53 @@
-import React, { createContext, useState, useEffect, useCallback } from "react";
-import {
-  onChildAdded,
-  onChildChanged,
-  db,
-  userRef,
-  set,
-  userId,
-  get,
-} from "../services/firebase";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./Layout";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Game from "../components/game";
-import Home from "./Home";
+import { Round3 } from "../components/round";
+import {
+  setLoading,
+  checkTournament,
+  setTournament,
+  setTournaments,
+} from "../redux/user/userSlice";
+import {
+  lastTournamentQuery,
+  onSnapshot,
+  tournamentQuery,
+} from "../services/firebase";
 import History from "./History";
-import { Round2, Round3 } from "../components/round";
-import { Provider, useDispatch } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { setUser, setUsers } from "../redux/user/userSlice";
-import { sample } from "./data";
+import Home from "./Home";
+import Layout from "./Layout";
 
 const Main = () => {
   const dispatch = useDispatch();
-  const loadUser = useCallback(async () => {
-    const users = await get(userRef);
-    dispatch(setUsers(users.val()));
-  }, []);
   useEffect(() => {
-    loadUser();
-    // setting nfts to firebase
-    // Object.keys(sample).map((key) => {
-    //   console.log(key, sample[key]);
-    //   set(userId(key.replace(/#/ig,'_')), sample[key]);
-    // });
-
-    // let userAddListner = onChildAdded(
-    //   userRef,
-    //   (snapshot) => {
-    //     const user = snapshot.val();
-    //     dispatch(setUser({ key: snapshot.key, value: user }));
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   }
-    // );
-    let userChangeListner = onChildChanged(
-      userRef,
-      (snapshot) => {
-        const user = snapshot.val();
-        dispatch(setUser({ key: snapshot.key, value: user }));
-      },
-      (err) => {
-        console.log(err);
+    console.log("setting nfts to firebase");
+    dispatch(setLoading(true));
+    // load all tournaments
+    let lastTournamentListner = onSnapshot(lastTournamentQuery, (snapshot) => {
+      console.log("last one ", snapshot.docs);
+      if (snapshot.docs.length > 0) {
+        const lastTournament = snapshot.docs[0].data();
+        dispatch(setTournament({ ...lastTournament, id: snapshot.docs[0].id }));
+        setTimeout(() => {
+          dispatch(checkTournament());
+        }, 3000);
+      } else {
+        dispatch(setTournament(null));
       }
-    );
+      dispatch(setLoading(false));
+    });
+    let tournamentsListner = onSnapshot(tournamentQuery, (snapshot) => {
+      let tournaments = [];
+      snapshot.docs.map((doc) => {
+        tournaments.push({ ...doc.data(), id: doc.id });
+      });
+      dispatch(setTournaments(tournaments));
+      dispatch(setLoading(false));
+    });
     return () => {
-      // userAddListner();
-      userChangeListner();
+      lastTournamentListner();
+      tournamentsListner();
     };
   }, []);
   return (
@@ -63,7 +55,6 @@ const Main = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Game />} />
-          <Route path="/round" element={<Round3 />} />
           <Route path="/home" element={<Home />} />
           <Route path="/history" element={<History />} />
         </Routes>

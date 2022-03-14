@@ -15,6 +15,7 @@ import {
   setDoc,
   getDocs,
   query,
+  onSnapshot,
   limit,
   where,
   orderBy,
@@ -43,7 +44,11 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const fStore = getFirestore(app);
 const userRef = ref(db, "/nft/users");
+// tournamentRef 
 const tournamentsRef = collection(fStore, "tournaments");
+// firebase firestore tournament's round Ref 
+const roundsRef = (tournament_id) =>
+  collection(doc(tournamentsRef, tournament_id), "rounds");
 const tournamentId = (id) => doc(tournamentsRef, id);
 const setTournament = (id, data) => setDoc(tournamentId(id), data);
 export const tournamentQuery = query(
@@ -53,10 +58,17 @@ export const tournamentQuery = query(
 );
 export const lastTournamentQuery = query(
   tournamentsRef,
-  where("status", "==", "finished"),
-  orderBy("createdAt", "desc"),
+  where("status", "==", "active"),
+  orderBy("updatedAt", "desc"),
   limit(1)
 );
+// export const roundsQuery = (tournament_id) =>
+//   query(
+//     roundsRef,
+//     where("status", "==", "active"),
+//     orderBy("updatedAt", "desc"),
+//     limit(1)
+//   );
 export const loadTournaments = async () => {
   const tournaments = await getDocs(tournamentQuery);
   return tournaments.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
@@ -67,6 +79,8 @@ export {
   db,
   app,
   onChildAdded,
+  onSnapshot,
+  roundsRef,
   onChildChanged,
   onChildRemoved,
   userRef,

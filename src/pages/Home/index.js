@@ -9,6 +9,7 @@ import { loadTournaments } from "../../services/firebase";
 const Home = () => {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.user.loading);
+  const error = useSelector((state) => state.user.error);
   const _loadTournaments = async () => {
     dispatch(setLoading(true));
     try {
@@ -34,6 +35,7 @@ const Home = () => {
         <div style={{ color: "white" }}>Loading...</div>
       ) : (
         <div className="row center mt-4">
+          {!!error && <div style={{ color: "red" }}>{error}</div>}
           <Button onClick={onClick} disabled={loading}>
             {" "}
             Start Tournament{" "}
