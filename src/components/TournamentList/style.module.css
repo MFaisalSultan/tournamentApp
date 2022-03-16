@@ -1,0 +1,26 @@
+.main {
+  width: 90%;
+  margin: auto;
+  margin-top: 2rem;
+}
+.heading {
+  font-size: 24px;
+}
+.headingParent {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  border-bottom: 2px solid #b91414;
+  margin-top: 1rem;
+}
+a {
+  text-decoration: none;
+}
+.link {
+  color: #4ec9ff;
+  font-size: 20px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}

@@ -118,7 +118,7 @@ const Game = () => {
     restOfAllWinners = rounds.slice(0, restIndex);
     TTWinners = rounds.slice(restIndex);
   }
-  const round = rounds.length > 0 ? rounds[rounds.length - 1] : null;
+  const round = rounds && rounds.length > 0 ? rounds[rounds.length - 1] : null;
 
   return (
     <div className="game">

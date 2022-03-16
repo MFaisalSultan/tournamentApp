@@ -19,10 +19,15 @@ import Counter from "../Counter";
 const CommonAccordion = ({ data, counter, TTWinners = [], round }) => {
   const [searchValue, setSearchValue] = useState("");
   let saveData = data?.matches ?? [];
+  console.log(saveData, 'daa with save')
 
   if (!!searchValue) {
     saveData = data?.matches?.filter((v) => {
-      return v.player1?.id == searchValue || v.player2?.id == searchValue;
+      let getIndexPlayer1 = v?.player1?.playerId?.indexOf('_') + 1
+      let player1Id = v?.player1?.playerId?.slice(getIndexPlayer1)
+      let getIndexPlayer2 = v?.player2?.playerId?.indexOf('_') + 1
+      let player2Id = v?.player2?.playerId?.slice(getIndexPlayer2)
+      return player1Id == searchValue || player2Id == searchValue;
     });
   }
   let showData =
@@ -36,7 +41,7 @@ const CommonAccordion = ({ data, counter, TTWinners = [], round }) => {
     <>
       <Accordion className={styles.myaccordion}>
         <h1 className={styles.timer}>
-          <Counter {...roundInfo} current={round} />
+          {counter && <Counter {...roundInfo} current={round} />}
         </h1>
         <Card className={styles.card}>
           <Card.Header className={styles.cardHeader}>

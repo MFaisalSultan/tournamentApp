@@ -1,3 +1,6 @@
+.container{
+  margin-top: 2rem;
+}
 .row {
   align-items: flex-end;
 }

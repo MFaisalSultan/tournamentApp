@@ -6,8 +6,6 @@ import SubHeader from "../../components/SubHeader";
 const Layout = ({ children }) => {
   return (
     <Container fluid>
-      <Navbar />
-      <SubHeader />
       <div>{children}</div>
     </Container>
   );

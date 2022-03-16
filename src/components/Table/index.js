@@ -5,7 +5,6 @@ import styles from "./style.module.css";
 import medal from "../../assets/icons/medal.svg";
 
 const CommonTable = ({ data }) => {
-  console.log(data, "data in table");
   let winner = (id, result) => {
     return id === result?.playerId;
   };

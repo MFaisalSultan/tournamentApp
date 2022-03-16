@@ -80,7 +80,7 @@ export const Round2 = ({ rounds: prevRounds }) => {
         <div className="champion">
           <p>WINNER</p>
           <div className="round round-six">
-            <ul className="matchup">
+            <ul className="matchup" style={{padding:'0'}}>
               {prevRounds.slice(lastIndex).length > 0 ? (
                 prevRounds.slice(lastIndex).map((v, i) => {
                   return (

@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import Game from "../components/game";
+import Navbar from "../components/Navbar";
 import { Round3 } from "../components/round";
+import SubHeader from "../components/SubHeader";
 import {
   setLoading,
   checkTournament,
@@ -15,6 +17,7 @@ import {
   tournamentQuery,
 } from "../services/firebase";
 import History from "./History";
+import Tournaments from "./Tournaments";
 import Home from "./Home";
 import Layout from "./Layout";
 
@@ -53,10 +56,13 @@ const Main = () => {
   return (
     <Layout>
       <Router>
+        <Navbar />
+        <SubHeader />
         <Routes>
           <Route path="/" element={<Game />} />
           <Route path="/home" element={<Home />} />
           <Route path="/history" element={<History />} />
+          <Route path="/tournament/:id" element={<Tournaments />} />
         </Routes>
       </Router>
     </Layout>
