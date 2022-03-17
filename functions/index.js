@@ -1,20 +1,26 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-
+const moment = require("moment");
+const cron =require('node-cron')
 admin.initializeApp();
 const tournamentRef = admin.firestore().collection("tournaments");
-const userRef = admin.database().ref("/nft/users");
-const traitsRef = admin.database().ref("/nft/traits");
+const userRef = admin.database().ref("/users");
+const traitsRef = admin.database().ref("/traits");
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
-
-exports.createTournaments = functions.https.onCall(async (_, context) => {
+// cron.schedule('0 */1 * * * *', async () => {
+  
+//   console.log('scheduler => archived',moment())
+// })
+exports.createTournaments = functions.https.onCall(async (body, context) => {
   try {
     //   tournament
+    let { date, time } = body;
     let tournamentName = "Tournament ";
     let no = 1;
     const last = await tournamentRef
-      .orderBy("createdAt", "desc")
+      .orderBy("no", "desc")
+      // .where("status", "==", "active")
       .limit(1)
       .get();
     if (!last.empty) {
@@ -31,11 +37,12 @@ exports.createTournaments = functions.https.onCall(async (_, context) => {
       no = 1;
     }
     tournamentName = "Tournament " + no;
-
+    // return { success: false, tournamentName };
     const users = (await userRef.once("value")).val();
     const { rounds, players, playersCount } = initialData(Object.values(users));
     const tournament = tournamentRef.doc();
-    const created = new Date();
+    // let now = moment()
+    const created = moment(`${date} ${time}`, "YYYY-MM-DD HH:mm")
     let data = await tournament.set({
       id: tournament.id,
       rounds,
@@ -45,10 +52,10 @@ exports.createTournaments = functions.https.onCall(async (_, context) => {
       name: tournamentName,
       currentRound: 1,
       status: "active",
-      createdAt: created.getTime(),
-      updatedAt: created.getTime(),
+      createdAt: created.toDate().getTime(),
+      updatedAt: created.toDate().getTime(),
     });
-
+    // if()
     const roundsRef = tournament.collection("rounds");
     try {
       await checkRound(roundsRef, rounds, players);

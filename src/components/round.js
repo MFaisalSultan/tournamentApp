@@ -46,10 +46,10 @@ export const Round2 = ({ rounds: prevRounds }) => {
                             {childItem.player1?.playerName}
                           </span>
                         </li>
-                        {!(
+                        {/* {!(
                           parentLength - 1 === ind &&
                           childLength - 1 === childInd
-                        ) && (
+                        ) && ( */}
                           <li
                             className="team team-bottom first-team"
                             style={{
@@ -67,7 +67,7 @@ export const Round2 = ({ rounds: prevRounds }) => {
                               {childItem.player2?.playerName}
                             </span>
                           </li>
-                        )}
+                        {/* )} */}
                       </ul>
                     );
                   }
@@ -158,7 +158,7 @@ export const Round2 = ({ rounds: prevRounds }) => {
                             {childItem.player1?.playerName}
                           </span>
                         </li>
-                        {!(0 === ind && 0 === childInd) && (
+                        {/* {!(0 === ind && 0 === childInd) && ( */}
                           <li
                             className="team team-bottom second-team"
                             style={{
@@ -175,7 +175,7 @@ export const Round2 = ({ rounds: prevRounds }) => {
                               {childItem.player2?.playerName}
                             </span>
                           </li>
-                        )}
+                        {/* )} */}
                       </ul>
                     );
                   }

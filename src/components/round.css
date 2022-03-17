@@ -95,6 +95,11 @@
   font-size: 45px;
   padding: 10px 0;
 }
+.champion .matchup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .round {
   display: block;
   float: left;
@@ -164,7 +169,7 @@
   height: 60px;
   /* padding: 280px 0; */
 }
-.round-5{
+.round-5 {
   margin-top: 39px !important;
 }
 .round-5 .matchup {
@@ -364,28 +369,28 @@
     font-size: 18px;
   }
 }
-.first-team{
+.first-team {
   /* background-color: #c8252a !important ; */
   color: white;
   font-style: italic !important;
 }
-li span{
+li span {
   color: white !important;
 }
-.second-team{
+.second-team {
   /* background-color: #4ec9ff !important; */
   color: white;
   font-style: italic !important;
 }
-.win-team{
-  background: linear-gradient(180deg,#fdca00 0%,#fe0000 100%) !important;
+.win-team {
+  background: linear-gradient(180deg, #fdca00 0%, #fe0000 100%) !important;
   opacity: 1 !important;
   font-style: italic !important;
   color: white;
   display: flex;
   justify-content: center;
 }
-.champion p{
-  color: #FFE814;
+.champion p {
+  color: #ffe814;
   font-style: italic;
 }

@@ -13,20 +13,6 @@ import CommonTable from "./Table/index.js";
 const Game = () => {
   const { tournament, loading, rounds } = useSelector((s) => s.user);
   const dispatch = useDispatch();
-  // const { players, setPlayers, noOfRounds } = useInitialiseTournament();
-  // const [winners, setWinners] = useState([]);
-  // const [timer, setTimer] = useState(0);
-  // // const { users } = useContext(DataContext);
-  // console.log("rendering game");
-  // const randPlayer = () => {
-  //   let index =
-  //     players.length > 32 ? Math.floor(Math.random() * players.length) : 0;
-
-  //   let player = players[index];
-  //   players.splice(index, 1);
-  //   setPlayers(players);
-  //   return player;
-  // };
   // add rounds Listner to firebase
   useEffect(() => {
     let roundsListner;
@@ -44,77 +30,13 @@ const Game = () => {
     };
   }, [tournament]);
 
-  // const winnerss = [];
-  // const dataToReAssign = [];
-
-  // const startGame = () => {
-  //   let p1 = randPlayer();
-  //   let p2 = randPlayer();
-  //   if (!(p1 && p2)) return;
-
-  //   let winner = p1.weighting > p2.weighting ? p1 : p2;
-
-  //   let structure = {
-  //     player1: p1,
-  //     player2: p2,
-  //     result: winner,
-  //   };
-
-  //   winnerss.push(structure);
-  //   dataToReAssign.push(winner);
-
-  //   if (players.length > 0) {
-  //     startGame();
-  //   } else {
-  //     let newStructure = {
-  //       name: `Round ${winners.length + 1}`,
-  //       matches: winnerss,
-  //     };
-
-  //     let ter = (players.length <= 32 ? 2 : 2) * 1000 * 15;
-
-  //     setTimer(ter);
-  //     let interval = setInterval(() => {
-  //       setWinners([...winners, newStructure]);
-  //       if (dataToReAssign.length > 0) {
-  //         if (players.length === 32)
-  //           setPlayers(dataToReAssign.sort((a, b) => a.id - b.id));
-  //         else setPlayers(dataToReAssign);
-  //       } else {
-  //         dataToReAssign = [];
-  //         setPlayers(dataToReAssign);
-  //       }
-  //       clearInterval(interval);
-  //     }, ter);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   startGame();
-  // }, []);
-
-  // useEffect(() => {
-  //   let letSecondsInterval = setInterval(() => {
-  //     if (timer > 0) {
-  //       setTimer(timer - 1000);
-  //     } else {
-  //       startGame();
-  //     }
-  //   }, 1000);
-
-  //   return () => {
-  //     clearInterval(letSecondsInterval);
-  //   };
-  // }, [timer]);
-
-  let counter = 0;
-  //   timer / 1000 < 60
-  //     ? timer / 1000 + " Seconds"
-  //     : timer / 1000 / 60 + " Minutes";
   let TTWinners = rounds;
   let restOfAllWinners = [];
   if (tournament && tournament.rounds > 5) {
-    let restIndex = rounds.length > 5 ? rounds.length - 5 : 1;
+    let restIndex =
+      rounds.length > tournament.rounds - 5
+        ? tournament.rounds - 5
+        : rounds.length;
     restOfAllWinners = rounds.slice(0, restIndex);
     TTWinners = rounds.slice(restIndex);
   }
