@@ -1,21 +1,84 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const moment = require("moment");
-const cron =require('node-cron')
+const cron = require("node-cron");
 admin.initializeApp();
 const tournamentRef = admin.firestore().collection("tournaments");
 const userRef = admin.database().ref("/users");
 const traitsRef = admin.database().ref("/traits");
+const timerRef = admin.database().ref("/timer");
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
-// cron.schedule('0 */1 * * * *', async () => {
-  
-//   console.log('scheduler => archived',moment())
-// })
-exports.createTournaments = functions.https.onCall(async (body, context) => {
+cron.schedule("0 */1 * * * *", async () => {
+  let time = moment().utc(false).format("YYYY-MM-DD HH:mm:ss");
+  timerRef.set(time, (err) => {
+    console.log("scheduler => archived", time);
+  });
+  try {
+    console.log("lastTournament");
+    const last = await tournamentRef
+      .orderBy("no", "desc")
+      .where("status", "==", "created")
+      .limit(1)
+      .get();
+
+    if (!last.empty) {
+      let lastTournament = last.docs[0].data();
+      let now = moment().utc(false);
+      let tournamentTime = moment(lastTournament.createdAt).utc(false);
+      // console.log(
+      //   "lastTournament",
+      //   tournamentTime.toString(),
+      //   now.toString(),
+      //   now.diff(tournamentTime, "milliseconds")
+      // );
+      let timerStart = moment(time, "YYYY-MM-DD HH:mm:ss").utc(false);
+      let againStart = timerStart.clone().add(1, "minutes");
+      console.log(
+        "start",
+        tournamentTime.toString(),
+        now.toString(),
+        tournamentTime.isSameOrAfter(timerStart),
+        tournamentTime.isSameOrBefore(againStart)
+      );
+      if (
+        tournamentTime.isSameOrAfter(timerStart) &&
+        tournamentTime.isSameOrBefore(againStart)
+      ) {
+        let timeOut = tournamentTime.diff(now, "milliseconds");
+        if (timeOut > 0) {
+          setTimeout(async () => {
+            let tourRef = tournamentRef.doc(lastTournament.id);
+            tourRef.update({
+              status: "active",
+            });
+            const roundsRef = tourRef.collection("rounds");
+            try {
+              await checkRound(
+                roundsRef,
+                lastTournament.rounds,
+                lastTournament.players
+              );
+            } catch (error) {
+              console.log(error);
+            }
+            console.log("start", timeOut);
+          }, timeOut);
+        }
+        // let tournament = last.docs[0].ref;
+        // tournament.update({
+        //   status: "archived",
+        // });
+      }
+    }
+  } catch (error) {
+    console.log(error, "error");
+  }
+});
+exports.createTournaments = functions.https.onCall(async (date, context) => {
   try {
     //   tournament
-    let { date, time } = body;
+    // let { date, time } = body;
     let tournamentName = "Tournament ";
     let no = 1;
     const last = await tournamentRef
@@ -25,7 +88,7 @@ exports.createTournaments = functions.https.onCall(async (body, context) => {
       .get();
     if (!last.empty) {
       let lastTournament = last.docs[0].data();
-      if (lastTournament.status === "active")
+      if (lastTournament.status !== "finished")
         return {
           success: false,
           message: "Tournament already running",
@@ -41,9 +104,10 @@ exports.createTournaments = functions.https.onCall(async (body, context) => {
     const users = (await userRef.once("value")).val();
     const { rounds, players, playersCount } = initialData(Object.values(users));
     const tournament = tournamentRef.doc();
-    // let now = moment()
-    const created = moment(`${date} ${time}`, "YYYY-MM-DD HH:mm")
-    let data = await tournament.set({
+    let now = moment().utc(false);
+    const created = moment(date, "YYYY-MM-DD HH:mm:ss").utc(false);
+
+    await tournament.set({
       id: tournament.id,
       rounds,
       no,
@@ -51,20 +115,74 @@ exports.createTournaments = functions.https.onCall(async (body, context) => {
       playersCount,
       name: tournamentName,
       currentRound: 1,
-      status: "active",
+      status: "created",
       createdAt: created.toDate().getTime(),
       updatedAt: created.toDate().getTime(),
     });
-    // if()
-    const roundsRef = tournament.collection("rounds");
-    try {
-      await checkRound(roundsRef, rounds, players);
-    } catch (error) {
-      console.log(error);
+
+    let timerTime = (await timerRef.once("value")).val();
+    if (!timerTime) {
+      return {
+        success: true,
+        message: "Tournament created",
+      };
     }
+    let timerStart = moment(timerTime, "YYYY-MM-DD HH:mm:ss").utc(false);
+    let againStart = timerStart.clone().add(1, "minutes");
+    // functions.logger.info(
+    //   "Hello logs!",
+    //   againStart,
+    //   timerStart,
+    //   created,
+    //   date
+    //   // created.isSameOrBefore(againStart),
+    //   // created.isSameOrAfter(timerStart)
+    // );
+    if (
+      created.isSameOrBefore(againStart) &&
+      created.isSameOrAfter(timerStart)
+    ) {
+      console.log("start");
+      let timeOut = created.diff(now, "milliseconds");
+      console.log("start");
+      if (timeOut > 0) {
+        setTimeout(async () => {
+          tournament.update(
+            {
+              status: "active",
+            },
+            {
+              merge: true,
+            }
+          );
+          const roundsRef = tournament.collection("rounds");
+          try {
+            await checkRound(roundsRef, rounds, players);
+          } catch (error) {
+            console.log(error);
+          }
+          console.log("start", timeOut);
+        }, timeOut);
+      } else {
+        tournament.update(
+          {
+            status: "active",
+          },
+          {
+            merge: true,
+          }
+        );
+        const roundsRef = tournament.collection("rounds");
+        try {
+          await checkRound(roundsRef, rounds, players);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
     functions.logger.info("Hello logs!", tournamentName);
     return {
-      data,
       success: true,
       message: "Tournament created",
     };
