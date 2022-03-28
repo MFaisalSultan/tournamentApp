@@ -63,12 +63,12 @@ const setTournament = (id, data) => setDoc(tournamentId(id), data);
 export const tournamentQuery = query(
   tournamentsRef,
   where("status", "==", "finished"),
-  orderBy("createdAt", "desc")
+  orderBy("no", "desc")
 );
 export const lastTournamentQuery = query(
   tournamentsRef,
   where("status", "==", "active"),
-  orderBy("updatedAt", "desc"),
+  orderBy("no", "desc"),
   limit(1)
 );
 // export const roundsQuery = (tournament_id) =>
